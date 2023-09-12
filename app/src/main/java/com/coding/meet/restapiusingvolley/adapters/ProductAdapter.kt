@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.coding.meet.restapiusingvolley.R
+import com.coding.meet.restapiusingvolley.databinding.ViewProductBinding
 import com.coding.meet.restapiusingvolley.models.Product
 
 class ProductAdapter :
@@ -26,29 +27,22 @@ class ProductAdapter :
 
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val productTitleTxt: TextView = itemView.findViewById(R.id.productTitleTxt)
-        private val productPriceTxt: TextView = itemView.findViewById(R.id.productPriceTxt)
-        private val productRatingTxt: TextView = itemView.findViewById(R.id.productRatingTxt)
-        private val productReviewTxt: TextView = itemView.findViewById(R.id.productReviewTxt)
-        private val productImage: ImageView = itemView.findViewById(R.id.productImage)
-
+    class ViewHolder(private val viewProductBinding: ViewProductBinding) : RecyclerView.ViewHolder(viewProductBinding.root) {
         fun bindData(product: Product) {
-            Glide.with(productImage)
+            Glide.with(viewProductBinding.productImage)
                 .load(product.image)
-                .into(productImage)
+                .into(viewProductBinding.productImage)
 
-            productTitleTxt.text = product.title
-            productPriceTxt.text = "USD ${product.price}"
-            productRatingTxt.text = product.rating.rate.toString()
-            productReviewTxt.text = "${product.rating.count} Reviews"
+            viewProductBinding.productTitleTxt.text = product.title
+            viewProductBinding.productPriceTxt.text = "USD ${product.price}"
+            viewProductBinding.productRatingTxt.text = product.rating.rate.toString()
+            viewProductBinding.productReviewTxt.text = "${product.rating.count} Reviews"
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.view_product, parent, false)
+            ViewProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
