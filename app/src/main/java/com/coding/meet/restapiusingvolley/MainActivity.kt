@@ -12,6 +12,7 @@ import com.android.volley.toolbox.Volley
 import com.coding.meet.restapiusingvolley.adapters.ProductAdapter
 import com.coding.meet.restapiusingvolley.models.Product
 import com.coding.meet.restapiusingvolley.models.Rating
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.json.JSONArray
@@ -22,13 +23,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val productRV = findViewById<RecyclerView>(R.id.productRV)
-        val loadingPB = findViewById<ProgressBar>(R.id.loadingPB)
+        val shimmerFrameLayout = findViewById<ShimmerFrameLayout>(R.id.shimmerFrameLayout)
 
-        callProductApi(productRV, loadingPB)
+        callProductApi(productRV, shimmerFrameLayout)
     }
 
-    private fun callProductApi(productRV: RecyclerView, loadingPB: ProgressBar) {
-        loadingPB.visibility = View.VISIBLE
+    private fun callProductApi(productRV: RecyclerView, shimmerFrameLayout: ShimmerFrameLayout) {
+        shimmerFrameLayout.visibility = View.VISIBLE
+        shimmerFrameLayout.startShimmer()
         // Instantiate the RequestQueue.
         val queue = Volley.newRequestQueue(this)
         val url = "https://fakestoreapi.com/products"
@@ -43,13 +45,15 @@ class MainActivity : AppCompatActivity() {
 
                 val productAdapter = ProductAdapter()
                 productRV.adapter = productAdapter
-                loadingPB.visibility = View.GONE
+                shimmerFrameLayout.stopShimmer()
+                shimmerFrameLayout.visibility = View.GONE
                 productAdapter.submitList(productList)
 
             },
             { error ->
                 error.printStackTrace()
-                loadingPB.visibility = View.GONE
+                shimmerFrameLayout.stopShimmer()
+                shimmerFrameLayout.visibility = View.GONE
                 Toast.makeText(this, error.message, Toast.LENGTH_LONG).show()
             })
 
