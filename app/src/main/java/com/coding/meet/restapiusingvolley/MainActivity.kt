@@ -1,5 +1,6 @@
 package com.coding.meet.restapiusingvolley
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -43,7 +44,19 @@ class MainActivity : AppCompatActivity() {
                 val productList = callAutomaticData(response)
 
 
-                val productAdapter = ProductAdapter()
+                val productAdapter = ProductAdapter(){product ->
+                    // please variable name change like sendDataIntent, nextIntent, nextYourActivityNameIntent
+                    // do not variable name intent
+                    val sendDataIntent = Intent(this,ProductDetailActivity::class.java).apply {
+                        putExtra("id",product.id)
+                        putExtra("title",product.title)
+                        putExtra("image",product.image)
+                        putExtra("price",product.price)
+                        putExtra("rate",product.rating.rate)
+                        putExtra("count",product.rating.count)
+                    }
+                    startActivity(sendDataIntent)
+                }
                 productRV.adapter = productAdapter
                 shimmerFrameLayout.stopShimmer()
                 shimmerFrameLayout.visibility = View.GONE

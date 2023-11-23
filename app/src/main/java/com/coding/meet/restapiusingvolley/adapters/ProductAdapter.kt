@@ -12,7 +12,9 @@ import com.bumptech.glide.Glide
 import com.coding.meet.restapiusingvolley.R
 import com.coding.meet.restapiusingvolley.models.Product
 
-class ProductAdapter :
+class ProductAdapter(
+    val onClickListener : (Product) -> Unit
+) :
     ListAdapter<Product, ProductAdapter.ViewHolder>(DiffCallback()) {
 
     class DiffCallback : DiffUtil.ItemCallback<Product>() {
@@ -55,5 +57,8 @@ class ProductAdapter :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val product = getItem(position)
         holder.bindData(product)
+        holder.itemView.setOnClickListener {
+            onClickListener(product)
+        }
     }
 }
